@@ -1,22 +1,38 @@
-// render-functions.js
 import SimpleLightbox from 'simple-lightbox';
 import 'simple-lightbox/dist/simple-lightbox.css';
 
 const galleryContainer = document.querySelector('.gallery');
+let lightbox = null;
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionsData: 'alt',
-  captionDelay: 250,
-  close: true,
-  enableKeyboard: true,
-  docClose: true,
-  loop: true,
-  animationSpeed: 300,
-  fadeSpeed: 300,
-});
+/**
+ * Ініціалізує SimpleLightbox
+ */
+function initLightbox() {
+  if (lightbox) {
+    lightbox.destroy();
+  }
 
-function createGallery(images) {
+  lightbox = new SimpleLightbox('.gallery a', {
+    captions: true,
+    captionsData: 'alt',
+    captionDelay: 250,
+    captionPosition: 'bottom',
+    animationSpeed: 300,
+    fadeSpeed: 300,
+    close: true,
+    enableKeyboard: true,
+    docClose: true,
+    loop: true,
+  });
+}
+
+/**
+ * Створює HTML-розмітку для галереї
+ * @param {Array} images - Масив зображень з Pixabay API
+ */
+export function createGallery(images) {
+  if (!galleryContainer) return;
+
   const galleryMarkup = images
     .map(
       image => `
@@ -29,22 +45,22 @@ function createGallery(images) {
                     loading="lazy"
                 />
                 <div class="image-info">
-                    <p class="info-item">
+                    <div class="info-item">
                         <span class="info-label">👍 Likes</span>
                         <span class="info-value">${image.likes}</span>
-                    </p>
-                    <p class="info-item">
+                    </div>
+                    <div class="info-item">
                         <span class="info-label">👁️ Views</span>
                         <span class="info-value">${image.views}</span>
-                    </p>
-                    <p class="info-item">
+                    </div>
+                    <div class="info-item">
                         <span class="info-label">💬 Comments</span>
                         <span class="info-value">${image.comments}</span>
-                    </p>
-                    <p class="info-item">
+                    </div>
+                    <div class="info-item">
                         <span class="info-label">📥 Downloads</span>
                         <span class="info-value">${image.downloads}</span>
-                    </p>
+                    </div>
                 </div>
             </a>
         </li>
@@ -53,25 +69,40 @@ function createGallery(images) {
     .join('');
 
   galleryContainer.innerHTML = galleryMarkup;
-  lightbox.refresh();
-}
 
-function clearGallery() {
-  galleryContainer.innerHTML = '';
-}
-
-function showLoader() {
-  const loader = document.querySelector('.loader');
-  if (loader) {
-    loader.classList.add('show');
+  // Оновлюємо Lightbox після додавання нових елементів
+  if (!lightbox) {
+    initLightbox();
+  } else {
+    lightbox.refresh();
   }
 }
 
-function hideLoader() {
-  const loader = document.querySelector('.loader');
-  if (loader) {
-    loader.classList.remove('show');
+/**
+ * Очищає контейнер галереї
+ */
+export function clearGallery() {
+  if (galleryContainer) {
+    galleryContainer.innerHTML = '';
   }
 }
 
-export { createGallery, clearGallery, showLoader, hideLoader };
+/**
+ * Показує індикатор завантаження
+ */
+export function showLoader() {
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    loader.classList.add('is-active');
+  }
+}
+
+/**
+ * Ховає індикатор завантаження
+ */
+export function hideLoader() {
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    loader.classList.remove('is-active');
+  }
+}
