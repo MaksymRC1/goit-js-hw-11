@@ -1,12 +1,10 @@
-import SimpleLightbox from 'simple-lightbox';
-import 'simple-lightbox/dist/simple-lightbox.css';
+// src/js/render-functions.js
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.css';
 
 const galleryContainer = document.querySelector('.gallery');
 let lightbox = null;
 
-/**
- * Ініціалізує SimpleLightbox
- */
 function initLightbox() {
   if (lightbox) {
     lightbox.destroy();
@@ -19,17 +17,9 @@ function initLightbox() {
     captionPosition: 'bottom',
     animationSpeed: 300,
     fadeSpeed: 300,
-    close: true,
-    enableKeyboard: true,
-    docClose: true,
-    loop: true,
   });
 }
 
-/**
- * Створює HTML-розмітку для галереї
- * @param {Array} images - Масив зображень з Pixabay API
- */
 export function createGallery(images) {
   if (!galleryContainer) return;
 
@@ -70,7 +60,6 @@ export function createGallery(images) {
 
   galleryContainer.innerHTML = galleryMarkup;
 
-  // Оновлюємо Lightbox після додавання нових елементів
   if (!lightbox) {
     initLightbox();
   } else {
@@ -78,18 +67,12 @@ export function createGallery(images) {
   }
 }
 
-/**
- * Очищає контейнер галереї
- */
 export function clearGallery() {
   if (galleryContainer) {
     galleryContainer.innerHTML = '';
   }
 }
 
-/**
- * Показує індикатор завантаження
- */
 export function showLoader() {
   const loader = document.querySelector('.loader');
   if (loader) {
@@ -97,9 +80,6 @@ export function showLoader() {
   }
 }
 
-/**
- * Ховає індикатор завантаження
- */
 export function hideLoader() {
   const loader = document.querySelector('.loader');
   if (loader) {

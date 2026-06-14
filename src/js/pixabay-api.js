@@ -3,11 +3,6 @@ import axios from 'axios';
 const PIXABAY_BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '48876382-0e4f5cbb23d48eb9ff8904d68';
 
-/**
- * Виконує HTTP-запит до Pixabay API для пошуку зображень
- * @param {string} query - Пошуковий запит
- * @returns {Promise<object>} - Promise з даними відповіді
- */
 export function getImagesByQuery(query) {
   const params = new URLSearchParams({
     key: API_KEY,
@@ -23,13 +18,9 @@ export function getImagesByQuery(query) {
     .then(response => response.data)
     .catch(error => {
       if (error.response) {
-        throw new Error(
-          `API Error: ${error.response.status} - ${error.response.statusText}`
-        );
+        throw new Error(`API Error: ${error.response.status}`);
       } else if (error.request) {
-        throw new Error(
-          'No response received from Pixabay API. Please check your internet connection.'
-        );
+        throw new Error('No response from server');
       } else {
         throw new Error(`Request error: ${error.message}`);
       }
